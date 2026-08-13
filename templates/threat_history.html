@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2 class="page-title">Threat History</h2>
+  <p class="muted-text">A chronological view of every scan and its threat classification.</p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Type</th>
+        <th>Entity</th>
+        <th>Threat Level</th>
+        <th>Risk Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in history %}
+        <tr>
+          <td>{{ item.created_at }}</td>
+          <td>{{ item.scan_type }}</td>
+          <td>{{ item.entity }}</td>
+          <td><span class="tag {{ item.threat_level.lower() }}">{{ item.threat_level }}</span></td>
+          <td>{{ item.risk_score }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="5" class="muted">No history yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2 class="page-title">Security Command Center</h2>
+  <p class="muted-text">Your AI-powered protection layer keeps pace with phishing, email fraud, suspicious files, and QR-based attacks.</p>
+
+  <section class="stats-grid">
+    <div class="stat-card">
+      <div class="label">Today's Security Score</div>
+      <div class="value">{{ stats.security_score }}%</div>
+      <div class="muted">High confidence posture</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Safe Links</div>
+      <div class="value">{{ stats.safe_links }}</div>
+      <div class="muted">Protected destinations</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Dangerous Links</div>
+      <div class="value">{{ stats.dangerous_links }}</div>
+      <div class="muted">Threats flagged</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Emails Scanned</div>
+      <div class="value">{{ stats.emails_scanned }}</div>
+      <div class="muted">Phishing checks</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Files Scanned</div>
+      <div class="value">{{ stats.files_scanned }}</div>
+      <div class="muted">Attachments reviewed</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">QR Codes Scanned</div>
+      <div class="value">{{ stats.qr_scanned }}</div>
+      <div class="muted">Dangerous URLs detected</div>
+    </div>
+  </section>
+
+  <section class="grid-2">
+    <div class="card">
+      <h3>Threat History</h3>
+      <div class="list">
+        {% for item in history %}
+          <div class="list-item">
+            <div>
+              <strong>{{ item.entity }}</strong>
+              <div class="muted">{{ item.scan_type }} · {{ item.created_at }}</div>
+            </div>
+            <span class="tag {{ item.threat_level.lower() if item.threat_level.lower() in ['safe','medium','high','critical'] else 'medium' }}">{{ item.threat_level }}</span>
+          </div>
+        {% else %}
+          <div class="muted">No scans yet. Start with the scanner tools to build a secure history.</div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="card">
+      <h3>Latest Alerts</h3>
+      <div class="list">
+        {% for alert in notifications %}
+          <div class="list-item">
+            <div>
+              <strong>{{ alert.title }}</strong>
+              <div class="muted">{{ alert.message }}</div>
+            </div>
+            <span class="tag {{ alert.severity.lower() }}">{{ alert.severity }}</span>
+          </div>
+        {% else %}
+          <div class="muted">No alerts at the moment.</div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endblock %}

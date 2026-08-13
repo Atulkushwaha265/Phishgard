@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="form-card">
+    <h2>QR Code Scanner</h2>
+    <p class="muted-text">Upload a QR image, inspect the decoded destination, and highlight suspicious links before a user opens them.</p>
+    <form method="post" enctype="multipart/form-data">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+      <div class="form-group">
+        <label for="image">Upload QR image</label>
+        <input id="image" name="image" type="file" required />
+      </div>
+      <div class="form-group">
+        <label for="decoded_url">Decoded URL (optional)</label>
+        <input id="decoded_url" name="decoded_url" placeholder="https://example.com/login" />
+      </div>
+      <button class="btn btn-primary" type="submit">Scan QR</button>
+    </form>
+
+    {% if result %}
+      <div class="result-box">
+        <h3>Assessment</h3>
+        <div class="result-grid">
+          <div><strong>Verdict</strong><br /><span class="score-pill">{{ result.verdict or result.threat_level }}</span></div>
+          <div><strong>Threat Level</strong><br /><span class="score-pill">{{ result.threat_level }}</span></div>
+          <div><strong>Risk Score</strong><br /><span class="score-pill">{{ result.risk_score }}/100</span></div>
+          {% if result.details.confidence %}
+          <div><strong>Confidence</strong><br /><span class="score-pill">{{ result.details.confidence }}</span></div>
+          {% endif %}
+          <div><strong>Payload Type</strong><br />{{ result.details.payload_type or 'Unknown' }}</div>
+          <div><strong>Decoded Data</strong><br />{{ result.details.decoded_url[:100] }}{{ '...' if result.details.decoded_url|length > 100 else '' }}</div>
+          <div><strong>Image</strong><br />{{ result.details.image_name }}</div>
+        </div>
+        <p style="margin-top: 10px;"><strong>Explanation:</strong> {{ result.explanation }}</p>
+        {% if result.details.signals %}
+        <p class="muted-text" style="margin-top: 10px;"><strong>Suspicious Signals:</strong></p>
+        <ul style="margin-top: 5px; padding-left: 20px;">
+          {% for signal in result.details.signals %}
+          <li>{{ signal }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

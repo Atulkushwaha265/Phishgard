@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2 class="page-title">AI Security Reports</h2>
+  <p class="muted-text">Generate a professional report for a suspicious URL, email, or file and download it later.</p>
+
+  <div class="form-card">
+    <form method="post" action="{{ url_for('report.generate_report') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+      <div class="form-group">
+        <label for="title">Report Title</label>
+        <input id="title" name="title" value="Phishing Investigation" required />
+      </div>
+      <div class="form-group">
+        <label for="risk_score">Risk Score</label>
+        <input id="risk_score" name="risk_score" type="number" value="88" required />
+      </div>
+      <div class="form-group">
+        <label for="explanation">Summary</label>
+        <textarea id="explanation" name="explanation" required>Potential malicious activity detected. Recommend blocking access until reviewed.</textarea>
+      </div>
+      <div class="form-group">
+        <label for="recommendations">Recommendations</label>
+        <input id="recommendations" name="recommendations" value="Block access, verify sender, isolate the device" />
+      </div>
+      <button class="btn btn-primary" type="submit">Generate Report</button>
+    </form>
+  </div>
+
+  <div class="card" style="margin-top: 20px;">
+    <h3>Saved Reports</h3>
+    <div class="list">
+      {% for item in reports %}
+        <div class="list-item">
+          <div>
+            <strong>{{ item.title }}</strong>
+            <div class="muted">{{ item.summary }}</div>
+          </div>
+          <a class="btn btn-secondary" href="{{ url_for('report.download_report', filename=item.report_path.split('/')[-1]) }}">Download</a>
+        </div>
+      {% else %}
+        <div class="muted">No reports generated yet.</div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

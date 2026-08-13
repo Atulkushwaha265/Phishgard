@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="form-card">
+    <h2>Profile</h2>
+    <p class="muted-text">Your account is ready to use SafeLink AI for proactive security analysis.</p>
+    <div class="result-box">
+      <strong>Email</strong>: {{ current_user.email }}<br />
+      <strong>Name</strong>: {{ current_user.full_name }}<br />
+      <strong>Role</strong>: {{ current_user.role }}
+    </div>
+  </div>
+{% endblock %}

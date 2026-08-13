@@ -1,0 +1,11 @@
+[tool.ruff]
+exclude = [
+    ".venv",
+    ".qodo",
+    "__pycache__",
+    "uploads",
+    "reports",
+    ".git"
+]
+
+line-length = 100

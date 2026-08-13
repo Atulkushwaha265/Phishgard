@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2 class="page-title">Notifications</h2>
+  <div class="list">
+    {% for notification in notifications %}
+      <div class="list-item">
+        <div>
+          <strong>{{ notification.title }}</strong>
+          <div class="muted">{{ notification.message }}</div>
+        </div>
+        <span class="tag {{ notification.severity.lower() }}">{{ notification.severity }}</span>
+      </div>
+    {% else %}
+      <div class="muted">No notifications available right now.</div>
+    {% endfor %}
+  </div>
+{% endblock %}

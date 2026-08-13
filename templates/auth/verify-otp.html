@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="form-card">
+    <h2>Verify your identity</h2>
+    <p class="muted-text">Enter the 6-digit verification code sent to {{ email }}.</p>
+    <form method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+      <div class="form-group">
+        <label for="otp">Verification code</label>
+        <input id="otp" name="otp" type="text" maxlength="6" inputmode="numeric" required />
+      </div>
+      <button class="btn btn-primary" type="submit">Verify</button>
+    </form>
+    <p class="muted-text" style="margin-top: 12px;">
+      <a href="{{ url_for('auth.login') }}">Back to sign in</a>
+    </p>
+  </div>
+{% endblock %}

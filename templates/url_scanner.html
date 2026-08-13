@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="form-card">
+    <h2>Link Scanner</h2>
+    <p class="muted-text">Paste any URL to evaluate its safety posture using heuristic analysis and AI-based explanation.</p>
+    <form method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+      <div class="form-group">
+        <label for="url">URL</label>
+        <input id="url" name="url" placeholder="https://example.com" required />
+      </div>
+      <button class="btn btn-primary" type="submit">Analyze URL</button>
+    </form>
+
+    {% if result %}
+      <div class="result-box">
+        <h3>Assessment</h3>
+        <div class="result-grid">
+          <div><strong>Verdict</strong><br /><span class="score-pill">{{ result.verdict or result.threat_level }}</span></div>
+          <div><strong>Threat Level</strong><br /><span class="score-pill">{{ result.threat_level }}</span></div>
+          <div><strong>Risk Score</strong><br /><span class="score-pill">{{ result.risk_score }}/100</span></div>
+          {% if result.details.confidence %}
+          <div><strong>Confidence</strong><br /><span class="score-pill">{{ result.details.confidence }}</span></div>
+          {% endif %}
+          <div><strong>AI Explanation</strong><br />{{ result.explanation }}</div>
+          <div><strong>Recommended Action</strong><br />{{ result.recommendations[0] }}</div>
+        </div>
+        {% if result.details.signals %}
+        <p class="muted-text" style="margin-top: 10px;"><strong>Suspicious Signals:</strong></p>
+        <ul style="margin-top: 5px; padding-left: 20px;">
+          {% for signal in result.details.signals %}
+          <li>{{ signal }}</li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="muted-text" style="margin-top: 10px;">Suspicious Signals: None detected</p>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

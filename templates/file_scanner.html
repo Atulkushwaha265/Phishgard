@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="form-card">
+    <h2>File Scanner</h2>
+    <p class="muted-text">Upload a file to evaluate suspicious extensions, macros, and high-risk attachment patterns.</p>
+    <form method="post" enctype="multipart/form-data">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+      <div class="form-group">
+        <label for="file">Upload file</label>
+        <input id="file" name="file" type="file" required />
+      </div>
+      <button class="btn btn-primary" type="submit">Scan File</button>
+    </form>
+
+    {% if result %}
+      <div class="result-box">
+        <h3>Assessment</h3>
+        <div class="result-grid">
+          <div><strong>Threat Level</strong><br /><span class="score-pill">{{ result.threat_level }}</span></div>
+          <div><strong>Risk Score</strong><br /><span class="score-pill">{{ result.risk_score }}/100</span></div>
+          <div><strong>Extension</strong><br />{{ result.details.extension }}</div>
+          <div><strong>Size</strong><br />{{ result.details.size_bytes }} bytes</div>
+        </div>
+        <p style="margin-top: 10px;"><strong>Explanation:</strong> {{ result.explanation }}</p>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="form-card">
+    <h2>Email Scanner</h2>
+    <p class="muted-text">Paste the full email content to inspect sender details, links, urgency language, and phishing markers.</p>
+    <form method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+      <div class="form-group">
+        <label for="email">Email content</label>
+        <textarea id="email" name="email" placeholder="From: ...&#10;Subject: ...&#10;Body: ..." required></textarea>
+      </div>
+      <button class="btn btn-primary" type="submit">Analyze Email</button>
+    </form>
+
+    {% if result %}
+      <div class="result-box">
+        <h3>Assessment</h3>
+        <div class="result-grid">
+          <div><strong>Verdict</strong><br /><span class="score-pill">{{ result.verdict or result.threat_level }}</span></div>
+          <div><strong>Threat Level</strong><br /><span class="score-pill">{{ result.threat_level }}</span></div>
+          <div><strong>Risk Score</strong><br /><span class="score-pill">{{ result.risk_score }}/100</span></div>
+          {% if result.details.confidence %}
+          <div><strong>Confidence</strong><br /><span class="score-pill">{{ result.details.confidence }}</span></div>
+          {% endif %}
+          <div><strong>Sender</strong><br />{{ result.details.sender }}</div>
+          <div><strong>Subject</strong><br />{{ result.details.subject }}</div>
+        </div>
+        <p style="margin-top: 10px;"><strong>Explanation:</strong> {{ result.explanation }}</p>
+        {% if result.details.signals %}
+        <p class="muted-text" style="margin-top: 10px;"><strong>Suspicious Signals:</strong></p>
+        <ul style="margin-top: 5px; padding-left: 20px;">
+          {% for signal in result.details.signals %}
+          <li>{{ signal }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% if result.details.links %}
+        <p class="muted-text" style="margin-top: 10px;"><strong>URLs Found:</strong></p>
+        <ul style="margin-top: 5px; padding-left: 20px;">
+          {% for link in result.details.links %}
+          <li>{{ link }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2 class="page-title">Admin Dashboard</h2>
+  <p class="muted-text">Enterprise views over users, threats, and the most dangerous domains seen by SafeLink AI.</p>
+  <section class="stats-grid">
+    <div class="stat-card">
+      <div class="label">Total Users</div>
+      <div class="value">{{ stats.users }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Threat Scans</div>
+      <div class="value">{{ stats.scans }}</div>
+    </div>
+  </section>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Most Dangerous Domains</h3>
+      <div class="list">
+        {% for item in stats.dangerous_domains %}
+          <div class="list-item">
+            <strong>{{ item.domain }}</strong>
+            <span class="tag high">{{ item.count }} hits</span>
+          </div>
+        {% else %}
+          <div class="muted">No dangerous domains recorded yet.</div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="card">
+      <h3>Most Common Attacks</h3>
+      <div class="list">
+        {% for item in stats.attack_types %}
+          <div class="list-item">
+            <strong>{{ item.attack }}</strong>
+            <span class="tag medium">{{ item.count }} scans</span>
+          </div>
+        {% else %}
+          <div class="muted">No attack patterns discovered.</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
